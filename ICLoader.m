@@ -13,7 +13,6 @@
 #import "UIView+Position.h"
 #import <FXBlurView/FXBlurView.h>
 #import "ICLoader.h"
-#import "INFRootController.h"
 #import "UIFont+ApplicationFonts.h"
 #import "UIColor+Hex.h"
 
@@ -40,7 +39,7 @@ static NSString *icProgressHudLogoImageName;
 {
     @synchronized (self)
     {
-        INFRootController *controller = (INFRootController *) [UIApplication sharedApplication].keyWindow.rootViewController;
+        UIViewController *controller = [UIApplication sharedApplication].keyWindow.rootViewController;
 
         dispatch_async(dispatch_get_main_queue(), ^
         {
@@ -63,7 +62,7 @@ static NSString *icProgressHudLogoImageName;
 
 + (void)dismiss
 {
-    INFRootController *controller = (INFRootController *) [UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController *controller = [UIApplication sharedApplication].keyWindow.rootViewController;
     dispatch_async(dispatch_get_main_queue(), ^
     {
         for (ICLoader *progressHUD in [ICLoader allHUDsForView:controller.view])
