@@ -9,5 +9,5 @@ Pod::Spec.new do |s|
   s.source_files  = 'ICLoader.{h,m}'
   s.requires_arc  = true
   s.ios.deployment_target = '5.0'
-  s.dependency 'FXBlurview'
+  s.dependency 'FXBlurView'
 end
