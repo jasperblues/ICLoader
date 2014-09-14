@@ -10,10 +10,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-#import "UIView+Position.h"
 #import <FXBlurView/FXBlurView.h>
 #import "ICLoader.h"
-#import "UIColor+Hex.h"
+#import "CKUITools.h"
 
 static NSString *icLoaderLogoImageName;
 static NSString *icLoaderLabelFontName;
