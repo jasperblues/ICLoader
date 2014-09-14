@@ -9,7 +9,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #import <Foundation/Foundation.h>
 
 @class FXBlurView;
@@ -21,11 +20,16 @@
 
 + (void)dismiss;
 
-+ (NSArray*)allHUDsForView:(UIView*)view;
++ (NSArray*)loadersForView:(UIView*)view;
 
 /**
 * Sets logo image to present.
 */
 + (void)setImageName:(NSString*)imageName;
+
+/**
+* Sets the label font name.
+*/
++ (void)setLabelFontName:(NSString*)fontName;
 
 @end

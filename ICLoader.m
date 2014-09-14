@@ -13,10 +13,10 @@
 #import "UIView+Position.h"
 #import <FXBlurView/FXBlurView.h>
 #import "ICLoader.h"
-#import "UIFont+ApplicationFonts.h"
 #import "UIColor+Hex.h"
 
-static NSString *icProgressHudLogoImageName;
+static NSString *icLoaderLogoImageName;
+static NSString *icLoaderLabelFontName;
 
 @interface ICLoader ()
 
@@ -41,22 +41,22 @@ static NSString *icProgressHudLogoImageName;
     {
         UIViewController *controller = [UIApplication sharedApplication].keyWindow.rootViewController;
 
+        ICLoader *loader = [[ICLoader alloc] initWithWithImageName:icLoaderLogoImageName];
         dispatch_async(dispatch_get_main_queue(), ^
         {
-            ICLoader *progressHUD = [[ICLoader alloc] initWithWithImageName:icProgressHudLogoImageName];
-            [progressHUD.contentView setUnderlyingView:controller.view];
-            [progressHUD setAlpha:0];
-            [controller.view addSubview:progressHUD];
+
+            [loader.contentView setUnderlyingView:controller.view];
+            [loader setAlpha:0];
+            [controller.view addSubview:loader];
             [controller.view setUserInteractionEnabled:NO];
 
-            [UIView transitionWithView:progressHUD duration:0.33 options:UIViewAnimationOptionTransitionFlipFromBottom animations:^
+            [UIView transitionWithView:loader duration:0.33 options:UIViewAnimationOptionTransitionFlipFromBottom animations:^
             {
-                [progressHUD setFrame:controller.view.bounds];
-                [progressHUD setAlpha:1.0];
+                [loader setFrame:controller.view.bounds];
+                [loader setAlpha:1.0];
             } completion:nil];
         });
-
-        return controller.progressHUD;
+        return loader;
     }
 }
 
@@ -65,22 +65,21 @@ static NSString *icProgressHudLogoImageName;
     UIViewController *controller = [UIApplication sharedApplication].keyWindow.rootViewController;
     dispatch_async(dispatch_get_main_queue(), ^
     {
-        for (ICLoader *progressHUD in [ICLoader allHUDsForView:controller.view])
+        for (ICLoader *loader in [ICLoader loadersForView:controller.view])
         {
-            [UIView transitionWithView:progressHUD duration:0.25 options:UIViewAnimationOptionTransitionFlipFromTop animations:^
+            [UIView transitionWithView:loader duration:0.25 options:UIViewAnimationOptionTransitionFlipFromTop animations:^
             {
-                [progressHUD setAlpha:0.0];
+                [loader setAlpha:0.0];
             } completion:^(BOOL finished)
             {
-                [progressHUD removeFromSuperview];
+                [loader removeFromSuperview];
                 [controller.view setUserInteractionEnabled:YES];
             }];
         }
     });
 }
 
-
-+ (NSArray *)allHUDsForView:(UIView *)view
++ (NSArray *)loadersForView:(UIView *)view
 {
     NSMutableArray *theHUDs = [NSMutableArray array];
     for (UIView *candidate in view.subviews)
@@ -95,8 +94,14 @@ static NSString *icProgressHudLogoImageName;
 
 + (void)setImageName:(NSString *)imageName
 {
-    icProgressHudLogoImageName = imageName;
+    icLoaderLogoImageName = imageName;
 }
+
++ (void)setLabelFontName:(NSString *)fontName
+{
+    icLoaderLabelFontName = fontName;
+}
+
 
 /* ====================================================================================================================================== */
 #pragma mark - Initializers
@@ -130,10 +135,6 @@ static NSString *icProgressHudLogoImageName;
 }
 
 
-- (void)dealloc
-{
-    NSLog(@"*** %@ in dealloc ***", NSStringFromClass([self class]));
-}
 
 /* ====================================================================================================================================== */
 #pragma mark - Overridden Methods
@@ -196,7 +197,7 @@ static NSString *icProgressHudLogoImageName;
     [_label setBackgroundColor:[UIColor clearColor]];
     [_label setTextColor:[UIColor whiteColor]];
     [_label setTextAlignment:NSTextAlignmentCenter];
-    [_label setFont:[UIFont applicationFontOfSize:10]];
+    [_label setFont:icLoaderLabelFontName ? [UIFont fontWithName:icLoaderLabelFontName size:10] : [UIFont systemFontOfSize:10]];
     [_label setText:@"Loading..."];
     [_contentView addSubview:_label];
 }
