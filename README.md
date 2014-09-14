@@ -1,5 +1,7 @@
 A simple frosty loader, similar to the one used in the <a href="https://github.com/typhoon-framework/Typhoon-Swift-Example">Typhoon Sample Application</a>.
 
+![Weather Report](http://www.typhoonframework.org/images/portfolio/PocketForecast3.gif)
+
 #Setup
 
 ```Objective-C
