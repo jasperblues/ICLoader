@@ -13,6 +13,7 @@
 #import <FXBlurView/FXBlurView.h>
 #import "ICLoader.h"
 #import <CKUITools/CKUITools.h>
+#import <CKUITools/UIColor+CKUITools.h>
 
 static NSString *icLoaderLogoImageName;
 static NSString *icLoaderLabelFontName;
