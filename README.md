@@ -8,6 +8,7 @@ A simple frosty loader, similar to the one used in the <a href="https://github.c
 
 //Required : The logo image to display
 [ICLoader setImageName:anImageName]; 
+// . . the image@2x should be about 85px across, and half as high
 
 //Optional
 [ICLoader setFontname:aFontName];
@@ -23,4 +24,8 @@ A simple frosty loader, similar to the one used in the <a href="https://github.c
 [ICLoader dismiss];
 ```
 
-ICLoader is presented in the root view controller. 
+ICLoader is presented in the root view controller's view. 
+
+#Installation
+
+Installation is via <a href="http://www.cocoapods.org/?q=ICLoader">CocoaPods</a>.
