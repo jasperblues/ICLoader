@@ -13,13 +13,15 @@
 #import "ICLoader.h"
 #import <CKUITools/CKUITools.h>
 #import <CKUITools/UIColor+CKUITools.h>
+#import <GPUImage/GPUImageiOSBlurFilter.h>
+#import <GPUImage/GPUImagePicture.h>
 
 static NSString *icLoaderLogoImageName;
 static NSString *icLoaderLabelFontName;
 
 @interface ICLoader ()
 
-@property(nonatomic, strong) UIView *backgroundView;
+@property(nonatomic, strong) UIImageView *backgroundView;
 @property(nonatomic, strong, readonly) UIImageView *logoView;
 @property(nonatomic, strong, readonly) UIView *centerDot;
 @property(nonatomic, strong, readonly) UIView *leftDot;
@@ -39,7 +41,21 @@ static NSString *icLoaderLabelFontName;
     {
         UIViewController *controller = [UIApplication sharedApplication].keyWindow.rootViewController;
 
-        ICLoader *loader = [[ICLoader alloc] initWithWithImageName:icLoaderLogoImageName];
+        UIGraphicsBeginImageContextWithOptions(controller.view.bounds.size, NO, [UIScreen mainScreen].scale);
+        [controller.view drawViewHierarchyInRect:controller.view.bounds afterScreenUpdates:YES];
+        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+
+        GPUImagePicture *picture = [[GPUImagePicture alloc] initWithImage:image];
+        GPUImageiOSBlurFilter *blurFilter = [[GPUImageiOSBlurFilter alloc] init];
+        [blurFilter setBlurRadiusInPixels:4];
+
+        [picture addTarget:blurFilter];
+        [blurFilter useNextFrameForImageCapture];
+        [picture processImage];
+
+        ICLoader *loader =
+            [[ICLoader alloc] initWithLogoImageName:icLoaderLogoImageName frostyBackgroundImage:[blurFilter imageFromCurrentFramebuffer]];
         dispatch_async(dispatch_get_main_queue(), ^
         {
             [controller.view addSubview:loader];
@@ -100,7 +116,7 @@ static NSString *icLoaderLabelFontName;
 /* ====================================================================================================================================== */
 #pragma mark - Initializers
 
-- (id)initWithWithImageName:(NSString *)imageName
+- (id)initWithLogoImageName:(NSString *)imageName frostyBackgroundImage:(UIImage *)image
 {
     if (imageName.length == 0)
     {
@@ -111,7 +127,10 @@ static NSString *icLoaderLabelFontName;
     self = [super initWithFrame:CGRectZero];
     if (self)
     {
-        _backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 90, 90)];
+        _backgroundView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 90, 90)];
+        [_backgroundView setImage:image];
+        [_backgroundView setContentMode:UIViewContentModeCenter];
+
         [_backgroundView setBackgroundColor:[UIColor colorWithHexRGB:0x666677 alpha:0.8]];
         [_backgroundView.layer setCornerRadius:45];
         [_backgroundView setClipsToBounds:YES];
@@ -221,4 +240,5 @@ static NSString *icLoaderLabelFontName;
 
 
 @end
+
 
