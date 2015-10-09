@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name          = "ICLoader"
-  s.version       = "1.0.3"
+  s.version       = "1.0.4"
   s.summary       = "(yet another) simple frosty loader/HUD."
   s.homepage      = "https://github.com/jasperblues/ICLoader.git"
   s.license       = { :type => 'Apache 2.0'}
