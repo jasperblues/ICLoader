@@ -48,16 +48,16 @@ static NSString *icLoaderLabelFontName;
         
         ICLoader *loader = [[ICLoader alloc] initWithWithImageName:icLoaderLogoImageName];
         dispatch_async(dispatch_get_main_queue(), ^
-                       {
-                           [visibleController.view addSubview:loader];
-                           [visibleController.view bringSubviewToFront:loader];
-                           [visibleController.view setUserInteractionEnabled:NO];
-                           
-                           [UIView transitionWithView:loader duration:0.33 options:UIViewAnimationOptionTransitionFlipFromBottom animations:^
-                            {
-                                [loader setFrame:visibleController.view.bounds];
-                            } completion:nil];
-                       });
+        {
+            [visibleController.view addSubview:loader];
+            [visibleController.view bringSubviewToFront:loader];
+            [visibleController.view setUserInteractionEnabled:NO];
+
+            [UIView transitionWithView:loader duration:0.33 options:UIViewAnimationOptionTransitionFlipFromBottom animations:^
+            {
+                [loader setFrame:visibleController.view.bounds];
+            } completion:nil];
+        });
         return loader;
     }
 }
@@ -74,19 +74,19 @@ static NSString *icLoaderLabelFontName;
     }
     
     dispatch_async(dispatch_get_main_queue(), ^
-                   {
-                       for (ICLoader *loader in [ICLoader loadersForView:visibleController.view])
-                       {
-                           [UIView transitionWithView:loader duration:0.25 options:UIViewAnimationOptionTransitionFlipFromTop animations:^
-                            {
-                                [loader setAlpha:0.0];
-                            } completion:^(BOOL finished)
-                            {
-                                [loader removeFromSuperview];
-                                [visibleController.view setUserInteractionEnabled:YES];
-                            }];
-                       }
-                   });
+    {
+        for (ICLoader *loader in [ICLoader loadersForView:visibleController.view])
+        {
+            [UIView transitionWithView:loader duration:0.25 options:UIViewAnimationOptionTransitionFlipFromTop animations:^
+            {
+                [loader setAlpha:0.0];
+            } completion:^(BOOL finished)
+            {
+                [loader removeFromSuperview];
+                [visibleController.view setUserInteractionEnabled:YES];
+            }];
+        }
+    });
 }
 
 + (NSArray *)loadersForView:(UIView *)view
@@ -122,9 +122,9 @@ static NSString *icLoaderLabelFontName;
     if (imageName.length == 0)
     {
         [NSException raise:NSInvalidArgumentException
-                    format:@"ICLoader requires a logo image. Set with [ICLoader setImageName:anImageName]"];
+            format:@"ICLoader requires a logo image. Set with [ICLoader setImageName:anImageName]"];
     }
-    
+
     self = [super initWithFrame:CGRectZero];
     if (self)
     {
@@ -133,7 +133,7 @@ static NSString *icLoaderLabelFontName;
         [_backgroundView.layer setCornerRadius:45];
         [_backgroundView setClipsToBounds:YES];
         [self addSubview:_backgroundView];
-        
+
         [self initLogo:imageName];
         [self initDots];
         [self initLabel];
@@ -165,31 +165,31 @@ static NSString *icLoaderLabelFontName;
     _logoView = [[UIImageView alloc] initWithImage:image];
     [_logoView setViewSize:image.size];
     [_logoView centerInRect:CGRectMake(0, 7, 90, 45)];
-    
+
     [_logoView setContentMode:UIViewContentModeScaleAspectFit];
     [_backgroundView addSubview:_logoView];
-    
+
 }
 
 - (void)initDots
 {
-    
+
     CGFloat dodWidth = 5;
     CGFloat centerX = (_backgroundView.frame.size.width - dodWidth) / 2;
     CGFloat dotY = ((_backgroundView.frame.size.height - dodWidth) / 2) + 9;
-    
+
     _centerDot = [[UIView alloc] initWithFrame:CGRectMake(centerX, dotY, dodWidth, dodWidth)];
     [_centerDot setBackgroundColor:[UIColor whiteColor]];
     [_centerDot.layer setCornerRadius:_centerDot.width / 2];
     [_centerDot.layer setOpacity:1.0];
     [_backgroundView addSubview:_centerDot];
-    
+
     _leftDot = [[UIView alloc] initWithFrame:CGRectMake(centerX - 11, dotY, dodWidth, dodWidth)];
     [_leftDot setBackgroundColor:[UIColor whiteColor]];
     [_leftDot.layer setCornerRadius:_leftDot.width / 2];
     [_leftDot.layer setOpacity:0.5];
     [_backgroundView addSubview:_leftDot];
-    
+
     _rightDot = [[UIView alloc] initWithFrame:CGRectMake(centerX + 11, dotY, dodWidth, dodWidth)];
     [_rightDot setBackgroundColor:[UIColor whiteColor]];
     [_rightDot.layer setCornerRadius:_rightDot.width / 2];
@@ -215,29 +215,28 @@ static NSString *icLoaderLabelFontName;
     __weak UIView *centerDot = _centerDot;
     __weak UIView *leftDot = _leftDot;
     __weak UIView *rightDot = _rightDot;
-    
+
     [UIView transitionWithView:weakSelf duration:0.4 options:UIViewAnimationOptionCurveEaseInOut animations:^
-     {
-         [centerDot.layer setOpacity:dot == centerDot ? 1.0 : 0.5];
-         [rightDot.layer setOpacity:dot == rightDot ? 1.0 : 0.5];
-         [leftDot.layer setOpacity:dot == leftDot ? 1.0 : 0.5];
-     } completion:^(BOOL complete)
-     {
-         if (dot == centerDot)
-         {
-             [weakSelf animateToDot:rightDot];
-         }
-         else if (dot == rightDot)
-         {
-             [weakSelf animateToDot:leftDot];
-         }
-         else
-         {
-             [weakSelf animateToDot:centerDot];
-         }
-     }];
+    {
+        [centerDot.layer setOpacity:dot == centerDot ? 1.0 : 0.5];
+        [rightDot.layer setOpacity:dot == rightDot ? 1.0 : 0.5];
+        [leftDot.layer setOpacity:dot == leftDot ? 1.0 : 0.5];
+    } completion:^(BOOL complete)
+    {
+        if (dot == centerDot)
+        {
+            [weakSelf animateToDot:rightDot];
+        }
+        else if (dot == rightDot)
+        {
+            [weakSelf animateToDot:leftDot];
+        }
+        else
+        {
+            [weakSelf animateToDot:centerDot];
+        }
+    }];
 }
 
 
 @end
-
