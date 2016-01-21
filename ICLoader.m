@@ -38,16 +38,24 @@ static NSString *icLoaderLabelFontName;
     @synchronized (self)
     {
         UIViewController *controller = [UIApplication sharedApplication].keyWindow.rootViewController;
-
+        UIViewController *visibleController;
+        
+        if ([controller isKindOfClass:[UINavigationController class]]) {
+            visibleController = ((UINavigationController *) controller).visibleViewController;
+        } else {
+            visibleController = controller;
+        }
+        
         ICLoader *loader = [[ICLoader alloc] initWithWithImageName:icLoaderLogoImageName];
         dispatch_async(dispatch_get_main_queue(), ^
         {
-            [controller.view addSubview:loader];
-            [controller.view setUserInteractionEnabled:NO];
+            [visibleController.view addSubview:loader];
+            [visibleController.view bringSubviewToFront:loader];
+            [visibleController.view setUserInteractionEnabled:NO];
 
             [UIView transitionWithView:loader duration:0.33 options:UIViewAnimationOptionTransitionFlipFromBottom animations:^
             {
-                [loader setFrame:controller.view.bounds];
+                [loader setFrame:visibleController.view.bounds];
             } completion:nil];
         });
         return loader;
@@ -57,9 +65,17 @@ static NSString *icLoaderLabelFontName;
 + (void)dismiss
 {
     UIViewController *controller = [UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController *visibleController;
+    
+    if ([controller isKindOfClass:[UINavigationController class]]) {
+        visibleController = ((UINavigationController *) controller).visibleViewController;
+    } else {
+        visibleController = controller;
+    }
+    
     dispatch_async(dispatch_get_main_queue(), ^
     {
-        for (ICLoader *loader in [ICLoader loadersForView:controller.view])
+        for (ICLoader *loader in [ICLoader loadersForView:visibleController.view])
         {
             [UIView transitionWithView:loader duration:0.25 options:UIViewAnimationOptionTransitionFlipFromTop animations:^
             {
@@ -67,7 +83,7 @@ static NSString *icLoaderLabelFontName;
             } completion:^(BOOL finished)
             {
                 [loader removeFromSuperview];
-                [controller.view setUserInteractionEnabled:YES];
+                [visibleController.view setUserInteractionEnabled:YES];
             }];
         }
     });
@@ -224,4 +240,3 @@ static NSString *icLoaderLabelFontName;
 
 
 @end
-
