@@ -1,6 +1,6 @@
 A simple frosty loader, similar to the one used in the <a href="https://github.com/typhoon-framework/Typhoon-Swift-Example">Typhoon Sample Application</a>.
 
-![Weather Report](http://appsquickly.github.io/typhoon/images/portfolio/PocketForecast3.gif)
+![Weather Report](http://appsquickly.github.io/Typhoon//images/portfolio/PocketForecast3.gif)
 
 # Setup
 
