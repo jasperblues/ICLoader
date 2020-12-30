@@ -24,7 +24,7 @@ public class ICLoader: UIView {
     private(set) var rightDot: UIView!
     private(set) var label: UILabel!
 
-    class func present() {
+    public class func present() {
         let lockQueue = DispatchQueue(label: "self")
         lockQueue.sync {
             let controller = UIApplication.shared.keyWindow?.rootViewController
@@ -49,7 +49,7 @@ public class ICLoader: UIView {
         }
     }
 
-    class func dismiss() {
+    public class func dismiss() {
         let controller = UIApplication.shared.keyWindow?.rootViewController
         var visibleController: UIViewController?
 
@@ -72,7 +72,7 @@ public class ICLoader: UIView {
         })
     }
 
-    class func loaders(for view: UIView?) -> [ICLoader] {
+    public class func loaders(for view: UIView?) -> [ICLoader] {
         var theHUDs: [ICLoader] = []
         for candidate in view?.subviews ?? [] {
             if candidate is ICLoader {
@@ -82,11 +82,11 @@ public class ICLoader: UIView {
         return theHUDs
     }
 
-    class func setImageName(_ imageName: String?) {
+    public class func setImageName(_ imageName: String?) {
         logoImageName = imageName
     }
 
-    class func setLabelFontName(_ fontName: String?) {
+    public class func setLabelFontName(_ fontName: String?) {
         labelFontName = fontName
     }
 
@@ -94,7 +94,7 @@ public class ICLoader: UIView {
     // MARK: - Initializers
     //-------------------------------------------------------------------------------------------
 
-    init(withImageName imageName: String) {
+    public init(withImageName imageName: String) {
         if (imageName.count) == 0 {
             fatalError("ICLoader requires a logo image. Set with [ICLoader setImageName:anImageName]")
         }
